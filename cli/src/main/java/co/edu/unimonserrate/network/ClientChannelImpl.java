@@ -40,7 +40,7 @@ public final class ClientChannelImpl {
   public @Nullable String read() {
     try {
       return this.bufferedReader.readLine();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new RuntimeException("An error occurred while reading from the server", e);
     }
   }

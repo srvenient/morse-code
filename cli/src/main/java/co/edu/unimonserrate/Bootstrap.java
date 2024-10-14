@@ -14,7 +14,7 @@ public final class Bootstrap {
 
     try {
       channel.connect();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new RuntimeException("An error occurred while connecting to the server", e);
     }
 

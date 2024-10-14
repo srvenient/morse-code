@@ -1,7 +1,5 @@
 [metadata]
 version = "1.0"
 
-[versions]
-
 [libraries]
 annotations = "org.jetbrains:annotations:24.1.0"

@@ -18,16 +18,16 @@ public final class LogicalTokenizer {
       System.out.println(val);
       switch (val) {
         case '.':
-          tokens.add(new Token(val, Token.Type.DOT, index));
+          tokens.add(new Token(val, Token.Type.DOT));
           break;
         case '-':
-          tokens.add(new Token(val, Token.Type.DASH, index));
+          tokens.add(new Token(val, Token.Type.DASH));
           break;
         case ' ':
-          tokens.add(new Token(val, Token.Type.SPACE, index));
+          tokens.add(new Token(val, Token.Type.SPACE));
           break;
         case '/':
-          tokens.add(new Token(val, Token.Type.WORD_SEPARATOR, index));
+          tokens.add(new Token(val, Token.Type.WORD_SEPARATOR));
           break;
         default:
           throw new IllegalArgumentException("Invalid character: " + val);

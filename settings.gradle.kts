@@ -4,7 +4,7 @@ pluginManagement {
 
 rootProject.name = "morse-code"
 
-sequenceOf("cli", "server").forEach {
+sequenceOf("common", "cli", "server").forEach {
   include("morse-code-$it")
   project(":morse-code-$it").projectDir = file(it)
 }

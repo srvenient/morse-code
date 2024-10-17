@@ -1,6 +1,7 @@
 package co.edu.unimonserrate.lexer;
 
 import co.edu.unimonserrate.parser.ExpressionParser;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public final class LogicalTokenizerTest {
@@ -15,8 +16,7 @@ public final class LogicalTokenizerTest {
   @Test
   void parser() {
     final String input = ".-.. . .- .-. -. .. -. --. / .--- .- ...- .- / .. ... / ..-. ..- -.";
-
     final var tokes = LogicalTokenizer.tokenize(input);
-    System.out.println(ExpressionParser.parse(tokes));
+    Assertions.assertEquals(ExpressionParser.parse(tokes), "LEARNING JAVA IS FUN");
   }
 }

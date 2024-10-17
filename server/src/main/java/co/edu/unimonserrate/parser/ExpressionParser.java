@@ -71,8 +71,7 @@ public final class ExpressionParser {
     throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
   }
 
-  public static @NotNull String parse(final @NotNull Deque<Token> tokens) {
-    System.out.println(tokens);
+  public static @NotNull String parse(final @NotNull Deque<Token> tokens) throws IllegalArgumentException {
     if (tokens.isEmpty()) {
       throw new IllegalArgumentException("Empty tokens");
     }

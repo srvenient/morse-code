@@ -15,7 +15,6 @@ public final class LogicalTokenizer {
     int index = 0;
     while (index < input.length()) {
       final var val = input.charAt(index);
-      System.out.println(val);
       switch (val) {
         case '.':
           tokens.add(new Token(val, Token.Type.DOT));

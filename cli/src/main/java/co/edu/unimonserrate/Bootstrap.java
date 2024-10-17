@@ -1,6 +1,7 @@
 package co.edu.unimonserrate;
 
-import co.edu.unimonserrate.network.ClientChannelImpl;
+import co.edu.unimonserrate.network.ClientChannel;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -9,15 +10,7 @@ public final class Bootstrap {
     throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
   }
 
-  public static void main(String[] args) {
-    final ClientChannelImpl channel = new ClientChannelImpl("172.19.55.255", 1313);
-
-    try {
-      channel.connect();
-    } catch (final Exception e) {
-      throw new RuntimeException("An error occurred while connecting to the server", e);
-    }
-
-    SwingUtilities.invokeLater(() -> new ApplicationViewer(channel).setVisible(true));
+  public static void main(final @NotNull String[] args) {
+    SwingUtilities.invokeLater(() -> new ApplicationViewer(new ClientChannel("172.19.55.255", 1313)));
   }
 }

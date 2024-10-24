@@ -17,7 +17,6 @@ public final class MonitorViewer extends JFrame {
     final var textArea = new JTextArea();
     this.add(new JScrollPane(textArea));
 
-    // Initialize a client with the server channel
     try {
       channel.onEnable(textArea);
     } catch (final Exception e) {

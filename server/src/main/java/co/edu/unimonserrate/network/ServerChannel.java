@@ -1,8 +1,8 @@
 package co.edu.unimonserrate.network;
 
+import co.edu.unimonserrate.concurrent.Synchronization;
 import co.edu.unimonserrate.network.client.ClientRunnable;
 import co.edu.unimonserrate.network.exception.ConnectionFailedException;
-import co.edu.unimonserrate.util.PrintHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public final class ServerChannel implements Channel{
   private final static int PORT = 1313;
@@ -24,10 +22,10 @@ public final class ServerChannel implements Channel{
 
   @Override
   public void onEnable(final @NotNull JTextArea textArea) throws IOException {
-    this.serverSocket = new ServerSocket(PORT);
+    this.serverSocket = new ServerSocket(ServerChannel.PORT);
 
-    PrintHelper.show("Server started on port " + PORT + "\n", textArea);
-    PrintHelper.show("Waiting for clients...\n", textArea);
+    Synchronization.notify(textArea, "Server started on port " + ServerChannel.PORT + "\n");
+    Synchronization.notify(textArea, "Waiting for clients...\n");
 
     new Thread(() -> {
       while (true) {
@@ -42,7 +40,7 @@ public final class ServerChannel implements Channel{
         final var connection = new Connection(id, clientSocket);
         this.addClient(connection);
 
-        PrintHelper.show("Client connected from " + id + "\n", textArea);
+        Synchronization.notify(textArea, "Client connected from " + id + "\n");
 
         new Thread(new ClientRunnable(this, connection, textArea)).start();
       }

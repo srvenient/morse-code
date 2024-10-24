@@ -35,13 +35,14 @@ public final class ClientChannel implements Channel {
       new Thread(() -> {
         while (true) {
           try {
-            final var message = this.connection.read();
+            final String message = this.connection.read();
             if (message == null || message.isEmpty()) {
               return;
             }
             textArea.append(message + "\n");
           } catch (final RuntimeException e) {
-            textArea.append("An error occurred while reading the message\n");
+            textArea.append("The server has disconnected\n");
+            break;
           }
         }
       }).start();

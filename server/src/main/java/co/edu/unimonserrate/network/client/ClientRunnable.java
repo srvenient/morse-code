@@ -1,14 +1,14 @@
 package co.edu.unimonserrate.network.client;
 
 import co.edu.unimonserrate.lexer.LogicalTokenizer;
+import co.edu.unimonserrate.lexer.Token;
 import co.edu.unimonserrate.network.Connection;
 import co.edu.unimonserrate.network.ServerChannel;
 import co.edu.unimonserrate.parser.ExpressionParser;
-import co.edu.unimonserrate.util.PrintHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Deque;
 
 public class ClientRunnable implements Runnable {
   private final ServerChannel serverChannel;
@@ -37,14 +37,20 @@ public class ClientRunnable implements Runnable {
         this.textArea.append("Client " + this.connection.id() + ": " + message + "\n");
 
         try {
-          final var tokens = LogicalTokenizer.tokenize(message);
-          final var parsedMessage = ExpressionParser.parse(tokens);
+          final Deque<Token> tokens = LogicalTokenizer.tokenize(message);
+          final String parsedMessage = ExpressionParser.parse(tokens);
 
           this.textArea.append("The server processes the message sent from the client " + this.connection.id() + "\n");
           this.textArea.append("Message analyzed: " + parsedMessage + "\n");
           this.textArea.append("The message was broadcasted to all clients\n");
 
-          this.broadcast(parsedMessage);
+          for (final var client : this.serverChannel.clients()) {
+            if (client == this.connection) {
+              continue;
+            }
+
+            client.write("Client " + this.connection.id() + ": " + message);
+          }
         } catch (final IllegalArgumentException e) {
           this.connection.write("Server: The message you sent could not be processed. Please try again.");
         }
@@ -54,16 +60,6 @@ public class ClientRunnable implements Runnable {
 
         break;
       }
-    }
-  }
-
-  private void broadcast(final @NotNull String message) {
-    for (final var client : this.serverChannel.clients()) {
-      if (client == this.connection) {
-        continue;
-      }
-
-      client.write("Client " + this.connection.id() + ": " + message);
     }
   }
 }

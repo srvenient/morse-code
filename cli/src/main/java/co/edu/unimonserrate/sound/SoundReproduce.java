@@ -22,11 +22,11 @@ public final class SoundReproduce {
 
     switch (note) {
       case '•' -> {
-        beep(sourceDataLine, ditDuration);
+        SoundReproduce.beep(sourceDataLine, ditDuration);
         Thread.sleep(ditDuration);
       }
       case '-' -> {
-        beep(sourceDataLine, dahDuration);
+        SoundReproduce.beep(sourceDataLine, dahDuration);
         Thread.sleep(dahDuration);
       }
       default -> throw new IllegalArgumentException("Invalid note: " + note);

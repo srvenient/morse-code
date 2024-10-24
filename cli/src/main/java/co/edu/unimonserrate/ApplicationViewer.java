@@ -9,11 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public final class ApplicationViewer extends JFrame {
-  private final Channel channel;
-
   public ApplicationViewer(final @NotNull Channel channel) {
-    this.channel = channel;
-
     this.setTitle("Application Viewer");
     this.setSize(800, 600);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

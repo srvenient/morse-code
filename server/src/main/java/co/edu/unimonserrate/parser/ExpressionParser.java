@@ -2,7 +2,6 @@ package co.edu.unimonserrate.parser;
 
 import co.edu.unimonserrate.lexer.Token;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Deque;
 import java.util.HashMap;
@@ -89,7 +88,7 @@ public final class ExpressionParser {
         while (!tokens.isEmpty() && tokens.peek().type() != Token.Type.SPACE) {
           morse.append(tokens.poll().value());
         }
-        final Character character = DECODING_TABLE.get(morse.toString());
+        final Character character = ExpressionParser.DECODING_TABLE.get(morse.toString());
         if (character == null) {
           throw new IllegalArgumentException("Invalid morse code: " + morse);
         }

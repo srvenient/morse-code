@@ -49,7 +49,7 @@ public class ClientRunnable implements Runnable {
               continue;
             }
 
-            client.write("Client " + this.connection.id() + ": " + message);
+            client.write("Client " + this.connection.id() + ": " + parsedMessage);
           }
         } catch (final IllegalArgumentException e) {
           this.connection.write("Server: The message you sent could not be processed. Please try again.");

@@ -36,15 +36,6 @@ public final class Connection {
     this.writer.println(message);
   }
 
-  public void close() {
-    try {
-      this.reader.close();
-      this.writer.close();
-    } catch (final IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
   public boolean isClosed() {
     return this.reader == null || this.writer == null;
   }

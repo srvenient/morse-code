@@ -38,10 +38,6 @@ public class MainFrame extends JFrame {
     super.add(inputPanel, BorderLayout.SOUTH);
   }
 
-  public @NotNull InputPanel inputPanel() {
-    return this.inputPanel;
-  }
-
   public void inputPanel(final @NotNull InputPanel inputPanel) {
     super.remove(this.inputPanel);
 

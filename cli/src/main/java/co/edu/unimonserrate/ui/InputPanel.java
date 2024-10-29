@@ -54,14 +54,6 @@ public final class InputPanel extends JPanel {
     }
   }
 
-  public @Nullable Connection connection() {
-    return this.connection;
-  }
-
-  public void connection(final @Nullable Connection connection) {
-    this.connection = connection;
-  }
-
   /**
    * Document filter to allow only dots, dashes, spaces, and slashes.
    */

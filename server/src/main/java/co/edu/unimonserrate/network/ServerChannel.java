@@ -11,7 +11,6 @@ import java.net.Socket;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class ServerChannel implements Channel {
-  private final static int PORT = 1313;
   private final CopyOnWriteArrayList<Connection> clients = new CopyOnWriteArrayList<>();
   private ServerSocket serverSocket;
   private int connectedClients = 0;

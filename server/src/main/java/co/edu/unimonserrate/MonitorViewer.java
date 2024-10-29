@@ -1,7 +1,6 @@
 package co.edu.unimonserrate;
 
 import co.edu.unimonserrate.network.Channel;
-import co.edu.unimonserrate.network.ServerChannel;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

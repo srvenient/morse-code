@@ -1,11 +1,10 @@
 package co.edu.unimonserrate.network;
 
-import co.edu.unimonserrate.concurrent.Synchronization;
+import co.edu.unimonserrate.logger.Logger;
 import co.edu.unimonserrate.network.client.ClientRunnable;
 import co.edu.unimonserrate.network.exception.ConnectionFailedException;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,32 +16,38 @@ public final class ServerChannel implements Channel {
   private ServerSocket serverSocket;
   private int connectedClients = 0;
 
-  public ServerChannel() {
+  private final Logger logger;
+
+  public ServerChannel(final @NotNull Logger logger) {
+    this.logger = logger;
   }
 
   @Override
-  public void onEnable(final @NotNull JTextArea textArea) throws IOException {
-    this.serverSocket = new ServerSocket(ServerChannel.PORT);
+  public void onEnable(final @NotNull String address, final int port) throws IOException {
+    this.serverSocket = new ServerSocket(port);
 
-    Synchronization.notify(textArea, "Server: Started on " + this.serverSocket.getInetAddress().getHostAddress() + ":" + ServerChannel.PORT + "\n");
-    Synchronization.notify(textArea, "Server: Waiting for clients...\n");
+    this.logger.info("[Server] Started on " + this.serverSocket.getInetAddress().getHostAddress() + ":" + port);
+    this.logger.info("[Server] Waiting for clients...");
 
+    // Listen for incoming connections
     new Thread(() -> {
       while (true) {
         final Socket clientSocket;
         try {
           clientSocket = this.serverSocket.accept();
         } catch (final IOException e) {
-          throw new ConnectionFailedException("Server: An error occurred while accepting a client", e);
+          throw new ConnectionFailedException("An error occurred while accepting a client", e);
         }
 
         final var id = clientSocket.getLocalAddress().getHostAddress() + ":" + clientSocket.getPort();
-        final var connection = new Connection(id, clientSocket);
-        this.add(connection);
-
-        Synchronization.notify(textArea, "Server: Client connected from " + id + "\n");
-
-        new Thread(new ClientRunnable(this, connection, textArea)).start();
+        try {
+          final Connection connection = new Connection(id, clientSocket);
+          this.add(connection);
+          this.logger.info("[Server] Client connected from " + id);
+          new Thread(new ClientRunnable(this, connection, this.logger)).start();
+        } catch (final IOException e) {
+          this.logger.error("[Server] An error occurred while connecting to the client");
+        }
       }
     })
       .start();

@@ -11,19 +11,13 @@ import java.net.Socket;
 
 public final class Connection {
   private final String id;
-
   private final BufferedReader reader;
   private final PrintWriter writer;
 
-  public Connection(final @NotNull String id, final @NotNull Socket socket) {
+  public Connection(final @NotNull String id, final @NotNull Socket socket) throws IOException {
     this.id = id;
-
-    try {
-      this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      this.writer = new PrintWriter(socket.getOutputStream(), true);
-    } catch (final IOException e) {
-      throw new RuntimeException("Server: An error occurred while creating the connection", e);
-    }
+    this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    this.writer = new PrintWriter(socket.getOutputStream(), true);
   }
 
   public @NotNull String id() {

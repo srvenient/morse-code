@@ -22,7 +22,7 @@ public final class Connection {
       this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.writer = new PrintWriter(socket.getOutputStream(), true);
     } catch (final IOException e) {
-      throw new RuntimeException("An error occurred while creating the connection", e);
+      throw new RuntimeException("Server: An error occurred while creating the connection", e);
     }
   }
 

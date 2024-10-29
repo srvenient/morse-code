@@ -24,31 +24,27 @@ public final class ClientChannel implements Channel {
   @Override
   public void onEnable(final @NotNull JTextArea textArea) {
     try {
-      textArea.append("Connecting to the server...\n");
-
+      textArea.append("Client: Connecting to the server...\n");
       this.socket = new Socket(this.host, this.port);
-
-      textArea.append("Connected to the server on " + this.host + ":" + this.port + "\n");
-
+      textArea.append("Client: Connected to the server on " + this.host + ":" + this.port + "\n");
       this.connection = new Connection(UUID.randomUUID().toString(), this.socket);
 
       new Thread(() -> {
         while (true) {
           try {
-            final String message = this.connection.read();
+            final var message = this.connection.read();
             if (message == null || message.isEmpty()) {
               return;
             }
             textArea.append(message + "\n");
           } catch (final RuntimeException e) {
-            textArea.append("The server has disconnected\n");
-            break;
+            textArea.append("Client: An error occurred while reading the message\n");
           }
         }
       }).start();
     } catch (final IOException e) {
-      textArea.append("An error occurred while connecting to the server\n");
-      throw new ConnectionFailedException("An error occurred while connecting to the server", e);
+      textArea.append("Client: An error occurred while connecting to the server\n");
+      throw new ConnectionFailedException("Client: An error occurred while connecting to the server", e);
     }
   }
 
@@ -57,9 +53,10 @@ public final class ClientChannel implements Channel {
     try {
       if (!this.socket.isClosed()) {
         this.socket.close();
+        this.connection.close();
       }
     } catch (final IOException e) {
-      throw new RuntimeException("An error occurred while closing the client socket", e);
+      throw new RuntimeException("Client: An error occurred while closing the client socket", e);
     }
   }
 

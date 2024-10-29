@@ -40,9 +40,9 @@ public class ClientRunnable implements Runnable {
           final Deque<Token> tokens = LogicalTokenizer.tokenize(message);
           final String parsedMessage = ExpressionParser.parse(tokens);
 
-          this.textArea.append("The server processes the message sent from the client " + this.connection.id() + "\n");
-          this.textArea.append("Message analyzed: " + parsedMessage + "\n");
-          this.textArea.append("The message was broadcasted to all clients\n");
+          this.textArea.append("Server: The server processes the message sent from the client " + this.connection.id() + "\n");
+          this.textArea.append("Server: Message analyzed : " + parsedMessage + "\n");
+          this.textArea.append("Server: The message was broadcasted to all clients\n");
 
           for (final var client : this.serverChannel.clients()) {
             if (client == this.connection) {
@@ -55,8 +55,8 @@ public class ClientRunnable implements Runnable {
           this.connection.write("Server: The message you sent could not be processed. Please try again.");
         }
       } catch (final RuntimeException e) {
-        this.textArea.append("The client " + this.connection.id() + " has disconnected\n");
-        this.serverChannel.removeClient(this.connection);
+        this.textArea.append("Server: The client " + this.connection.id() + " has disconnected\n");
+        this.serverChannel.remove(this.connection);
 
         break;
       }

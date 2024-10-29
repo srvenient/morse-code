@@ -11,7 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public final class ServerChannel implements Channel{
+public final class ServerChannel implements Channel {
   private final static int PORT = 1313;
   private final CopyOnWriteArrayList<Connection> clients = new CopyOnWriteArrayList<>();
   private ServerSocket serverSocket;
@@ -24,8 +24,8 @@ public final class ServerChannel implements Channel{
   public void onEnable(final @NotNull JTextArea textArea) throws IOException {
     this.serverSocket = new ServerSocket(ServerChannel.PORT);
 
-    Synchronization.notify(textArea, "Server started on port " + ServerChannel.PORT + "\n");
-    Synchronization.notify(textArea, "Waiting for clients...\n");
+    Synchronization.notify(textArea, "Server: Started on " + this.serverSocket.getInetAddress().getHostAddress() + ":" + ServerChannel.PORT + "\n");
+    Synchronization.notify(textArea, "Server: Waiting for clients...\n");
 
     new Thread(() -> {
       while (true) {
@@ -33,14 +33,14 @@ public final class ServerChannel implements Channel{
         try {
           clientSocket = this.serverSocket.accept();
         } catch (final IOException e) {
-          throw new ConnectionFailedException("An error occurred while accepting a client", e);
+          throw new ConnectionFailedException("Server: An error occurred while accepting a client", e);
         }
 
         final var id = clientSocket.getLocalAddress().getHostAddress() + ":" + clientSocket.getPort();
         final var connection = new Connection(id, clientSocket);
-        this.addClient(connection);
+        this.add(connection);
 
-        Synchronization.notify(textArea, "Client connected from " + id + "\n");
+        Synchronization.notify(textArea, "Server: Client connected from " + id + "\n");
 
         new Thread(new ClientRunnable(this, connection, textArea)).start();
       }
@@ -53,7 +53,7 @@ public final class ServerChannel implements Channel{
     try {
       this.serverSocket.close();
     } catch (final IOException e) {
-      throw new RuntimeException("An error occurred while closing the server", e);
+      throw new RuntimeException("Server: An error occurred while closing the server", e);
     }
   }
 
@@ -61,12 +61,12 @@ public final class ServerChannel implements Channel{
     return this.clients;
   }
 
-  public void addClient(final @NotNull Connection connection) {
+  public void add(final @NotNull Connection connection) {
     this.clients.add(this.connectedClients, connection);
     this.connectedClients++;
   }
 
-  public void removeClient(final @NotNull Connection connection) {
+  public void remove(final @NotNull Connection connection) {
     this.clients.remove(connection);
     this.connectedClients--;
   }

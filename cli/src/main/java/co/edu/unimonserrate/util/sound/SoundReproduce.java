@@ -1,4 +1,4 @@
-package co.edu.unimonserrate.sound;
+package co.edu.unimonserrate.util.sound;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +21,7 @@ public final class SoundReproduce {
     final int dahDuration = ditDuration * 3;
 
     switch (note) {
-      case '•' -> {
+      case '.' -> {
         SoundReproduce.beep(sourceDataLine, ditDuration);
         Thread.sleep(ditDuration);
       }

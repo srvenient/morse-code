@@ -3,9 +3,11 @@ package co.edu.unimonserrate;
 import co.edu.unimonserrate.network.Channel;
 import co.edu.unimonserrate.network.ClientChannel;
 import co.edu.unimonserrate.network.Connection;
+import co.edu.unimonserrate.util.filter.AllowedCharacterDocumentFilter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
 import java.awt.*;
 
 public final class ApplicationViewer extends JFrame {
@@ -30,6 +32,7 @@ public final class ApplicationViewer extends JFrame {
     final JTextField inputField = new JTextField();
     inputField.setPreferredSize(new Dimension(0, 30));
     inputField.setFont(new Font("Arial", Font.PLAIN, 16));
+    ((AbstractDocument) inputField.getDocument()).setDocumentFilter(new AllowedCharacterDocumentFilter());
     inputPanel.add(inputField, BorderLayout.CENTER);
 
     final JButton sendButton = new JButton("Enviar");
@@ -42,6 +45,11 @@ public final class ApplicationViewer extends JFrame {
     sendButton.addActionListener(event -> {
       final var text = inputField.getText();
       if (text.isEmpty()) {
+        return;
+      }
+
+      if (connection.isClosed()) {
+        textArea.append("The server has disconnected\n");
         return;
       }
 

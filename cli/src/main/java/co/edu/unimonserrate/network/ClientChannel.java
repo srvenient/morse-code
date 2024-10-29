@@ -1,66 +1,61 @@
 package co.edu.unimonserrate.network;
 
-import co.edu.unimonserrate.network.exception.ConnectionFailedException;
+import co.edu.unimonserrate.logger.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.UUID;
 
 public final class ClientChannel implements Channel {
   private Socket socket;
-
-  private final String host;
-  private final int port;
-
   private Connection connection;
 
-  public ClientChannel(final @NotNull String host, final int port) {
-    this.host = host;
-    this.port = port;
+  private final Logger logger;
+
+  public ClientChannel(final @NotNull Logger logger) {
+    this.logger = logger;
   }
 
   @Override
-  public void onEnable(final @NotNull JTextArea textArea) {
-    try {
-      textArea.append("Client: Connecting to the server...\n");
-      this.socket = new Socket(this.host, this.port);
-      textArea.append("Client: Connected to the server on " + this.host + ":" + this.port + "\n");
-      this.connection = new Connection(UUID.randomUUID().toString(), this.socket);
+  public void onEnable(final @NotNull String address, final int port) throws IOException {
+    this.logger.info("[Server] Connecting to the server on " + address + ":" + port + "...");
+    this.socket = new Socket(address, port);
+    this.logger.info("[Server] Connection established with the server");
+    this.connection = new Connection(UUID.randomUUID().toString(), this.socket);
 
-      new Thread(() -> {
-        while (true) {
-          try {
-            final var message = this.connection.read();
-            if (message == null || message.isEmpty()) {
-              return;
-            }
-            textArea.append(message + "\n");
-          } catch (final RuntimeException e) {
-            textArea.append("Client: An error occurred while reading the message\n");
+    new Thread(() -> {
+      while (true) {
+        try {
+          final var message = this.connection.read();
+          if (message == null || message.isEmpty()) {
+            return;
           }
+          this.logger.info(message);
+        } catch (final RuntimeException e) {
+          Thread.currentThread().interrupt();
+          this.logger.error("[Server] Connection to the server has been lost");
         }
-      }).start();
-    } catch (final IOException e) {
-      textArea.append("Client: An error occurred while connecting to the server\n");
-      throw new ConnectionFailedException("Client: An error occurred while connecting to the server", e);
-    }
+      }
+    }).start();
   }
 
   @Override
   public void onDisable() {
     try {
       if (!this.socket.isClosed()) {
-        this.socket.close();
-        this.connection.close();
+        this.socket = null;
+        this.connection.write("exit");
+        this.connection = null;
+        this.logger.info("[Server] Disconnecting from the server...");
       }
-    } catch (final IOException e) {
-      throw new RuntimeException("Client: An error occurred while closing the client socket", e);
+    } catch (final NullPointerException e) {
+      this.logger.info("[Server] Not connected to the server");
     }
   }
 
-  public @NotNull Connection connection() {
+  public @Nullable Connection connection() {
     return this.connection;
   }
 }

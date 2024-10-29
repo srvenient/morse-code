@@ -1,4 +1,4 @@
-package co.edu.unimonserrate.util.sound;
+package co.edu.unimonserrate.sound;
 
 import org.jetbrains.annotations.NotNull;
 

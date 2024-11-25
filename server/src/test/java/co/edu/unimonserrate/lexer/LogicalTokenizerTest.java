@@ -17,6 +17,6 @@ public final class LogicalTokenizerTest {
   void parser() {
     final String input = ".-.. . .- .-. -. .. -. --. / .--- .- ...- .- / .. ... / ..-. ..- -.";
     final var tokes = LogicalTokenizer.tokenize(input);
-    Assertions.assertEquals(ExpressionParser.parse(tokes), "LEARNING JAVA IS FUN");
+    Assertions.assertEquals("LEARNING JAVA IS FUN", ExpressionParser.parse(tokes));
   }
 }

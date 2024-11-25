@@ -17,11 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public final class InputPanel extends JPanel {
-  private Connection connection;
-
   public InputPanel(final @Nullable Connection connection, final @NotNull Logger logger) {
-    this.connection = connection;
-
     super.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
     super.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -32,6 +28,8 @@ public final class InputPanel extends JPanel {
 
     final var jButton = new JButton("Send");
     jButton.addActionListener(new ButtonActionListener(connection, jTextField, logger));
+
+    jTextField.addActionListener(e -> jButton.doClick());
 
     super.add(jTextField, BorderLayout.CENTER);
     super.add(jButton, BorderLayout.EAST);

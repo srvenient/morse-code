@@ -34,10 +34,16 @@ public final class Connection {
 
   public void write(final @NotNull String message) {
     this.writer.println(message);
+    this.writer.flush();
   }
 
   public boolean isClosed() {
     return this.reader == null || this.writer == null;
+  }
+
+  @Override
+  public int hashCode() {
+    return this.id.hashCode();
   }
 
   @Override
@@ -51,5 +57,14 @@ public final class Connection {
 
     final var connection = (Connection) obj;
     return this.id.equals(connection.id);
+  }
+
+  @Override
+  public String toString() {
+    return "Connection{" +
+      "id='" + this.id + '\'' +
+      ", reader=" + this.reader +
+      ", writer=" + this.writer +
+      '}';
   }
 }

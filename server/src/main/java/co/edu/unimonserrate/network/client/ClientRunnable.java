@@ -3,6 +3,7 @@ package co.edu.unimonserrate.network.client;
 import co.edu.unimonserrate.lexer.LogicalTokenizer;
 import co.edu.unimonserrate.lexer.Token;
 import co.edu.unimonserrate.logger.Logger;
+import co.edu.unimonserrate.network.Channel;
 import co.edu.unimonserrate.network.Connection;
 import co.edu.unimonserrate.network.ServerChannel;
 import co.edu.unimonserrate.parser.ExpressionParser;
@@ -33,7 +34,7 @@ public class ClientRunnable implements Runnable {
         if (message == null || message.isEmpty()) {
           return;
         }
-        if (message.equals("exit")) {
+        if (message.equals(Channel.MESSAGE_EXIT)) {
           this.logger.info("[Server] The client " + this.connection.id() + " has disconnected");
           this.serverChannel.remove(this.connection);
           break;
@@ -46,11 +47,11 @@ public class ClientRunnable implements Runnable {
           this.logger.info("[Server] The server processes the message sent from the client " + this.connection.id());
           this.logger.info("[Server] The message already analyzed : " + parsedMessage);
 
-          for (final var client : this.serverChannel.clients()) {
-            if (client == this.connection) {
+          for (final Connection client : this.serverChannel.clients()) {
+            if (client.equals(this.connection)) {
               continue;
             }
-            client.write("[Client/" + this.connection.id() + "] " + parsedMessage + "\n");
+            client.write("[Client/" + this.connection.id() + "] " + parsedMessage);
           }
         } catch (final IllegalArgumentException e) {
           this.connection.write("[Server] The message you sent could not be processed. Please try again.");

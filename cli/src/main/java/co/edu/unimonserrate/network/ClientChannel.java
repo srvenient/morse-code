@@ -34,10 +34,18 @@ public final class ClientChannel implements Channel {
           if (message == null || message.isEmpty()) {
             return;
           }
+          if (message.equals(Channel.MESSAGE_CLOSE)) {
+            if (!this.socket.isClosed()) {
+              this.socket = null;
+              this.connection = null;
+            }
+            this.logger.info("[Server] Connection to the server has been lost");
+            break;
+          }
           this.logger.info(message);
         } catch (final RuntimeException e) {
-          Thread.currentThread().interrupt();
           this.logger.error("[Server] Connection to the server has been lost");
+          break;
         }
       }
     }).start();
@@ -48,7 +56,7 @@ public final class ClientChannel implements Channel {
     try {
       if (!this.socket.isClosed()) {
         this.socket = null;
-        this.connection.write("exit");
+        this.connection.write(Channel.MESSAGE_EXIT);
         this.connection = null;
         this.logger.info("[Server] Disconnecting from the server...");
       }

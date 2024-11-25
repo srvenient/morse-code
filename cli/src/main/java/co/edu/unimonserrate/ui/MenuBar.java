@@ -1,6 +1,5 @@
 package co.edu.unimonserrate.ui;
 
-import co.edu.unimonserrate.logger.Logger;
 import co.edu.unimonserrate.network.ClientChannel;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MenuBar extends JMenuBar {
-  public MenuBar(final @NotNull Logger logger, final @NotNull MainFrame mainFrame, final @NotNull ClientChannel clientChannel) {
+  public MenuBar(final @NotNull MainFrame mainFrame, final @NotNull ClientChannel clientChannel) {
     final var settingsMenu = new JMenu("settings");
     final var ipConfigurationItem = new JMenuItem("IP Configuration");
     final var disconnectItem = new JMenuItem("Disconnect");

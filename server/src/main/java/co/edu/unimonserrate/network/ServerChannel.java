@@ -57,7 +57,7 @@ public final class ServerChannel implements Channel {
     try {
       this.serverSocket.close();
     } catch (final IOException e) {
-      throw new RuntimeException("Server: An error occurred while closing the server", e);
+      throw new RuntimeException("[Server] An error occurred while closing the server", e);
     }
   }
 

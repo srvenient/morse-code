@@ -1,6 +1,8 @@
 package co.edu.unimonserrate.network;
 
 import co.edu.unimonserrate.logger.Logger;
+import co.edu.unimonserrate.ui.InputPanel;
+import co.edu.unimonserrate.ui.MainFrame;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +54,16 @@ public final class ClientChannel implements Channel {
       }
     } catch (final NullPointerException e) {
       this.logger.info("[Server] Not connected to the server");
+    }
+  }
+
+  public void reload(final @NotNull MainFrame mainFrame, final @NotNull String address, final int port) {
+    try {
+      this.onEnable(address, port);
+      mainFrame.inputPanel(new InputPanel(this.connection, this.logger));
+    } catch (final IOException e) {
+      this.logger.error("[Server] An error occurred while connecting to the server");
+      this.logger.error("[Server] Check if the address or port is correct.");
     }
   }
 

@@ -23,7 +23,7 @@ public final class InputPanel extends JPanel {
 
     final var jTextField = new JTextField();
     jTextField.setPreferredSize(new Dimension(0, 30));
-    jTextField.setFont(new Font("Arial", Font.PLAIN, 16));
+    jTextField.setFont(new Font("Arial", Font.PLAIN, 25));
     ((AbstractDocument) jTextField.getDocument()).setDocumentFilter(new DocumentFilterImpl());
 
     final var jButton = new JButton("Send");
@@ -52,9 +52,6 @@ public final class InputPanel extends JPanel {
     }
   }
 
-  /**
-   * Document filter to allow only dots, dashes, spaces, and slashes.
-   */
   public static class DocumentFilterImpl extends DocumentFilter {
     @Override
     public void insertString(final @NotNull FilterBypass fb, final int offset, final @NotNull String string, final @NotNull AttributeSet attr) throws BadLocationException {
@@ -72,7 +69,7 @@ public final class InputPanel extends JPanel {
       }
     }
 
-    private void playSound(String text) {
+    private void playSound(final @NotNull String text) {
       for (char c : text.toCharArray()) {
         if (c == '.' || c == '-') {
           try {
